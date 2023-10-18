@@ -1,8 +1,8 @@
 // Your code here
 let characters = []
 document.addEventListener("DOMContentLoaded", function () {
-    const animalList = document.getElementById("animal-list");
-    const animalDetails = document.getElementById("animal-details");
+    const animalList = document.getElementById("characterInfo");
+    const animalDetails = document.getElementById("detailed-info");
 
     function fetchAnimals() {
         fetch("http://localhost:3000/characters")
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     animalList.appendChild(listItem);
                 });
             })
-            .catch((error) => console.error(error));
+            .catch((error) => (error));
     }
 
     function showAnimalDetails(animal) {
