@@ -1,38 +1,48 @@
-// Your code here
-let characters = []
-document.addEventListener("DOMContentLoaded", function () {
-    const animalList = document.getElementById("characterInfo");
-    const animalDetails = document.getElementById("detailed-info");
+let animals = []
 
-    function fetchAnimals() {
-        fetch("http://localhost:3000/characters")
-            .then((response) => response.json())
-            .then((data) => {
-                data.forEach((animal) => {
-                    const listItem = document.createElement("li");
-                    listItem.className = "carnival";
-                    listItem.textContent = animal.name;
-                    listItem.addEventListener("click", () => {
-                        showAnimalDetails(animal);
-                    });
-                    animalList.appendChild(listItem);
-                });
-            })
-            .catch((error) => (error));
+document.addEventListener("DOMContentLoaded", function(){
+    getAnimals()
+})
+
+function getAnimals(){
+    fetch ("http://localhost:3000/characters",{
+    method: "GET",
+    headers:{
+        "Content-Type": "application/json"
     }
+    }).then(data => data.json())
+    .then( response =>{
+        animals = [...response]
+        displayAnimals(response)
+    })
+}
 
-    function showAnimalDetails(animal) {
-        animalDetails.innerHTML = `
-            <h2>${animal.name}</h2>
-            <img src="${animal.image}" alt="${animal.name}">
-            <p>Votes: ${animal.votes}</p>
-            <button onclick="addVote(${animal.id})">Vote</button>
-        `;
+
+
+function displayAnimals(animals){
+    const animalbar = document.querySelector("animal-bar")
+    for(animal of animals){
+        const span = document.createElement("span");
+        span.innerText = animals.name;
+        span.setAttribute("id", animals.id)
+
+        span.addEventListener("click", (event)=>{
+            const animals = getAnimalsById(animals, parseInt(event.target.Id()))
+            displayAnimalsDetails(animals)
+        })
+
+        animals.appendChild(span);
+
     }
+}
 
-    // Call the fetchAnimals function to start loading data when the DOM is ready.
-    fetchAnimals();
-});
+function displayAnimalsDetails(animals){
+    const image = document.querySelector("#image");
+    image.src = animals.image
+}
 
-
-
+function getAnimalsById(animals, Id){
+    return animals.find((animals)=>{
+        return animals.Id === Id
+    })
+}
